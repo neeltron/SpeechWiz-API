@@ -1,6 +1,7 @@
 from flask import Flask, request
 import os
 from google.cloud import speech
+from pydub import AudioSegment
 
 credential_path = "bruh.json"
 
@@ -9,9 +10,12 @@ os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = credential_path
 app = Flask('app')
 
 def transcribe_file(speech_file: str) -> speech.RecognizeResponse:
+
+    m4a_audio = AudioSegment.from_file(speech_file, format="m4a")
+    m4a_audio.export("audio.mp3", format="mp3")
     client = speech.SpeechClient()
 
-    with open(speech_file, "rb") as audio_file:
+    with open("audio.mp3", "rb") as audio_file:
         content = audio_file.read()
 
     audio = speech.RecognitionAudio(content=content)
@@ -29,7 +33,7 @@ def transcribe_file(speech_file: str) -> speech.RecognizeResponse:
 
     return response
 
-print(transcribe_file("download.mp3"))
+
 
 @app.route('/')
 def hello_world():
@@ -43,6 +47,7 @@ def upload():
     if file:
       print("file is there")
       file.save("audio.m4a")
+      print(transcribe_file("audio.m4a"))
       return "upload successful!"
     else:
       return "no file"

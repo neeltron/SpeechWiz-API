@@ -158,6 +158,26 @@ files = [
 ]
 
 [[package]]
+name = "ffprobe"
+version = "0.5"
+description = "Wrapper around ffprobe command to extract metadata from media files"
+optional = false
+python-versions = "*"
+files = [
+    {file = "ffprobe-0.5.zip", hash = "sha256:f7dc048df62c6ccc1c602c865a7f0976b2679200fd07ebdc34ce51e9a8205b76"},
+]
+
+[[package]]
+name = "ffprobe3"
+version = "0.1.2"
+description = "Original Project: ffprobe (https://pypi.python.org/pypi/ffprobe)\n\n    A wrapper around ffprobe command to extract metadata from media files.\n\n    This project which is maintained by Dheerendra Rathor is a Python 3 port of original ffprobe."
+optional = false
+python-versions = "*"
+files = [
+    {file = "ffprobe3-0.1.2.tar.gz", hash = "sha256:1cb1cba15d33b82ea828de17c8ea4571e68c530f0d3616a6d55a8d2fef75b3d5"},
+]
+
+[[package]]
 name = "flask"
 version = "3.0.0"
 description = "A simple framework for building complex web applications."
@@ -514,6 +534,17 @@ files = [
 pyasn1 = ">=0.4.6,<0.6.0"
 
 [[package]]
+name = "pydub"
+version = "0.25.1"
+description = "Manipulate audio with an simple and easy high level interface"
+optional = false
+python-versions = "*"
+files = [
+    {file = "pydub-0.25.1-py2.py3-none-any.whl", hash = "sha256:65617e33033874b59d87db603aa1ed450633288aefead953b30bded59cb599a6"},
+    {file = "pydub-0.25.1.tar.gz", hash = "sha256:980a33ce9949cab2a569606b65674d748ecbca4f0796887fd6f46173a7b0d30f"},
+]
+
+[[package]]
 name = "requests"
 version = "2.31.0"
 description = "Python HTTP for Humans."
@@ -600,4 +631,4 @@ protobuf = ">=4.21.6,<5.0dev"
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.10.0,<3.11"
-content-hash = "84dd530b7a24edd1724029292b1dee2e09bfd134793144ed9fe0c90c5cea080f"
+content-hash = "9088d0a0696f1ece3f51e67bd860a7b811961173955ffdf6c7e1af7c3c4a7e69"
