@@ -4,6 +4,7 @@ from google.cloud import speech
 from pydub import AudioSegment
 import json
 from google.protobuf.json_format import MessageToDict
+from textblob import TextBlob
 
 credential_path = "bruh.json" # i have not uploaded this file to github because it's my api key
 
@@ -40,8 +41,26 @@ def transcribe_file(speech_file: str) -> speech.RecognizeResponse:
     transcription_string += result['alternatives'][0]['transcript']
     # print(result)
   print("Final String:", transcription_string)
+  blob = TextBlob(transcription_string)
+  print(blob.sentiment)
   global transcript
-  transcript = {'text': transcription_string}
+  transcript = {'text': transcription_string, 'polarity': 'something goes here', 'subjectivity': 'something goes here too'}
+  if blob.sentiment.polarity < -0.5:
+    transcript['polarity'] = 'negative'
+  elif blob.sentiment.polarity > -0.6 and blob.sentiment.polarity < 0.2:
+    transcript['polarity'] = 'slightly negative'
+  elif blob.sentiment.polarity > -0.3 and blob.sentiment.polarity < 0.3:
+    transcript['polarity'] = 'neutral'
+  elif blob.sentiment.polarity > 0.2 and blob.sentiment.polarity < 0.6:
+    transcript['polarity'] = 'slightly positive'
+  else:
+    transcript['polarity'] = 'positive'
+
+  if blob.sentiment.subjectivity > 0.5:
+    transcript['subjectivity'] = 'subjective'
+  else:
+    transcript['subjectivity'] = 'objective'
+  
   return response
 
 
