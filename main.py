@@ -5,8 +5,11 @@ from pydub import AudioSegment
 import json
 from google.protobuf.json_format import MessageToDict
 from textblob import TextBlob
+import language_tool_python
 
-credential_path = "bruh.json" # i have not uploaded this file to github because it's my api key
+tool = language_tool_python.LanguageTool('en-US')
+
+credential_path = "bruh.json"  # i have not uploaded this file to github because it's my api key
 
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = credential_path
 
@@ -23,11 +26,9 @@ def transcribe_file(speech_file: str) -> speech.RecognizeResponse:
     content = audio_file.read()
 
   audio = speech.RecognitionAudio(content=content)
-  config = speech.RecognitionConfig(
-      sample_rate_hertz=8000,
-      language_code="en-US",
-      enable_automatic_punctuation = True
-  )
+  config = speech.RecognitionConfig(sample_rate_hertz=8000,
+                                    language_code="en-US",
+                                    enable_automatic_punctuation=True)
 
   response = client.recognize(config=config, audio=audio)
   global transcribe
@@ -41,10 +42,24 @@ def transcribe_file(speech_file: str) -> speech.RecognizeResponse:
     transcription_string += result['alternatives'][0]['transcript']
     # print(result)
   print("Final String:", transcription_string)
+
+  matches = tool.check(transcription_string)
+  print(matches)
+  global match_list
+  match_list = ""
+  for iter in matches:
+    print(iter)
+    match_list += str(iter)
+  
   blob = TextBlob(transcription_string)
   print(blob.sentiment)
   global transcript
-  transcript = {'text': transcription_string, 'polarity': 'something goes here', 'subjectivity': 'something goes here too'}
+  transcript = {
+      'text': transcription_string,
+      'polarity': 'something goes here',
+      'subjectivity': 'something goes here too',
+      'match_list': match_list
+  }
   if blob.sentiment.polarity < -0.5:
     transcript['polarity'] = 'negative'
   elif blob.sentiment.polarity > -0.6 and blob.sentiment.polarity < 0.2:
@@ -60,7 +75,7 @@ def transcribe_file(speech_file: str) -> speech.RecognizeResponse:
     transcript['subjectivity'] = 'subjective'
   else:
     transcript['subjectivity'] = 'objective'
-  
+
   return response
 
 
