@@ -12,6 +12,8 @@ xds-protos = "^1.59.0"
 pydub = "0.25.1"
 ffprobe3 = "0.1.2"
 ffprobe = "0.5"
+jsonify = "^0.5"
+protobuf = "4.24.4"
 
 [tool.pyright]
 # https://github.com/microsoft/pyright/blob/main/docs/configuration.md
