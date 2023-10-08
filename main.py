@@ -5,7 +5,7 @@ from pydub import AudioSegment
 import json
 from google.protobuf.json_format import MessageToDict
 
-credential_path = "bruh.json"
+credential_path = "bruh.json" # i have not uploaded this file to github because it's my api key
 
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = credential_path
 
@@ -25,17 +25,23 @@ def transcribe_file(speech_file: str) -> speech.RecognizeResponse:
   config = speech.RecognitionConfig(
       sample_rate_hertz=8000,
       language_code="en-US",
+      enable_automatic_punctuation = True
   )
 
   response = client.recognize(config=config, audio=audio)
   global transcribe
-  print(response)
-  print("here")
+  # print(response)
+  # print("here")
+  global transcription_string
+  transcription_string = ""
   transcribe = MessageToDict(response._pb)
-  for result in response.results:
-    print("here2")
-    print(result)
-
+  for result in transcribe['results']:
+    # print("here2")
+    transcription_string += result['alternatives'][0]['transcript']
+    # print(result)
+  print("Final String:", transcription_string)
+  global transcript
+  transcript = {'text': transcription_string}
   return response
 
 
@@ -52,7 +58,7 @@ def upload():
     if file:
       print("file is there")
       file.save("audio.m4a")
-      transcript = transcribe_file("audio.m4a")
+      transcribe_file("audio.m4a")
       return "upload successful!"
     else:
       return "no file"
@@ -61,8 +67,8 @@ def upload():
 @app.route('/export', methods=["GET"])
 def export():
   if request.method == 'GET':
-    print(transcribe)
-    return make_response(transcribe)
+    # print(transcribe)
+    return make_response(transcript)
   else:
     return "not get"
 
